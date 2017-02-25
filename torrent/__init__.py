@@ -1,9 +1,9 @@
 import imp
 import os, string
 from math import log
-from config import BOT_BASE_DIR
 
-transmissionClass = imp.load_source('test', os.path.join(os.path.join(BOT_BASE_DIR, 'transmission-remote-cli'), 'transmission-remote-cli'))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+transmissionClass = imp.load_source('test', os.path.join(os.path.join(BASE_DIR, 'transmission-remote-cli'), 'transmission-remote-cli'))
 
 
 def sizeof_fmt(size,precision=2):

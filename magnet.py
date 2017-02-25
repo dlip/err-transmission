@@ -4,15 +4,22 @@ from subprocess import Popen
 import tempfile
 from torrent import transmissionClass, sizeof_fmt
 from config import TORRENT_USER, TORRENT_PASSWORD, TRANSMISSION_SERVER, TRANSMISSION_SERVER_PORT, TRANSMISSION_SERVER_RPC,\
-  GTALK_ANNOUNCEMENT_LIST, BOT_DATA_DIR, HIPCHAT_MODE, CHATROOM_PRESENCE,\
-  CHATROOM_FN
+  BOT_DATA_DIR
 import logging
 from torrent import TorrentData
-import xmpp
 import os
 from torrent.tInterface import TorrentInterface
 from threading import Timer
 import shelve
+from itertools import chain
+
+CONFIG_TEMPLATE = {
+          'TORRENT_USER': 'user',
+          'TORRENT_PASSWORD': 'password',
+          'TRANSMISSION_SERVER': 'localhost',
+          'TRANSMISSION_SERVER_PORT': 9091,
+          'TRANSMISSION_SERVER_RPC': 'transmission/rpc/'
+        }
 
 
 MAGNET_DB = BOT_DATA_DIR + os.sep + 'transmission.db'
@@ -21,16 +28,19 @@ class Magnet(BotPlugin):
     connected = False
     actived = False
 
+    def configure(self, configuration):
+        if configuration is not None and configuration != {}:
+            config = dict(chain(CONFIG_TEMPLATE.items(),
+                                configuration.items()))
+        else:
+            config = CONFIG_TEMPLATE
+        super(Magnet, self).configure(config)
+
+    def get_configuration_template(self):
+        return CONFIG_TEMPLATE 
+
     def sendMessage(self, message):
-      for rcvr in GTALK_ANNOUNCEMENT_LIST:
-        try:
-          message = xmpp.Message(rcvr, message)
-          message.setAttr('type', 'chat')
-          self.bare_send(message)
-        except Exception:
-          logging.exception("Exception occurred!")
-          
-    
+      yield message
     
     def do_announcement(self):
         if not self.actived:
@@ -64,10 +74,6 @@ class Magnet(BotPlugin):
 
     @botcmd(template='list')
     def list_torrents(self, mess, args):
-        return self.list_torrent(mess, args)
-
-    @botcmd(template='list')
-    def list_torrent(self, mess, args):
       """ Displays list of all queued up torrents.
       """
       t = self.get_transmission_session()

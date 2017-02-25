@@ -1,12 +1,15 @@
 import imp
-from config import BOT_BASE_DIR, TORRENT_PASSWORD, TORRENT_USER,\
-  TRANSMISSION_SERVER, TRANSMISSION_SERVER_PORT, TRANSMISSION_SERVER_RPC, TRANSMISSION_LOG_FILE
+from config import TORRENT_PASSWORD, TORRENT_USER,\
+  TRANSMISSION_SERVER, TRANSMISSION_SERVER_PORT, TRANSMISSION_SERVER_RPC, BOT_DATA_DIR
 import os
 import logging, datetime, time
 from zlogger import ZRotatingFileHandler
 from torrent import TorrentData, sizeof_fmt
 
-transmissionClass = imp.load_source('test', os.path.join(os.path.join(BOT_BASE_DIR, 'transmission-remote-cli'), 'transmission-remote-cli'))
+TRANSMISSION_LOG_FILE = os.path.join(BOT_DATA_DIR, 'transmission.log')
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+transmissionClass = imp.load_source('test', os.path.join(os.path.join(BASE_DIR, 'transmission-remote-cli'), 'transmission-remote-cli'))
 
 NEWTORRENT            = 1
 UPDATEDTORRENT        = 2

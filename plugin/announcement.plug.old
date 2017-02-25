@@ -1,6 +1,0 @@
-[Core]
-Name = Announcement
-Module = announcement
-
-[Documentation]
-Description = Announcement Module

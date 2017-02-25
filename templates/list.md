@@ -1,6 +1,6 @@
 {% if data  is defined %}
 {% for item in data %}
-{{item.tid}} {{item.tname}} {{item.tsize}} {{item.tstatus}} {{item.tdownloaded}}<br/>
+- {{item.tid}} {{item.tname}} {{item.tsize}} {{item.tstatus}} {{item.tdownloaded}}
 {% endfor %}
 {% if data|length == 0 %}
 No torrents scheduled! Please add some!

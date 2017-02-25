@@ -4,3 +4,6 @@ Module = magnet
 
 [Documentation]
 Description = Add magnet to currently running transmission-daemon
+
+[Python]
+Version = 2+
